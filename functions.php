@@ -432,3 +432,41 @@ function caise_widget_tag_cloud_args( $args ) {
 	return $args;
 }
 add_filter( 'widget_tag_cloud_args', 'caise_widget_tag_cloud_args' );
+
+/**
+ * Modifies fetching posts query so they are sorted by ACF 'year' for Conferences
+ *
+ * @since caise 1.1
+ *
+ * @param array $quiery The original query.
+ * @return array The modified query.
+ */
+function caise_conference_posts_sort ( $query ) {
+	if (is_archive() && $query->query_vars['category_name'] == 'conferences') {
+		$query->set('order', 'DESC');
+		$query->set('orderby', 'meta_value');
+		$query->set('meta_key', 'year');
+	}
+	return $query;
+}
+add_action('pre_get_posts', 'caise_conference_posts_sort');
+
+/**
+ * Removed 'Category: ' prefix before archive page's title
+ *
+ * @since caise 1.1
+ *
+ * @param string $title The title.
+ * @return string Stripped title.
+ */
+function caise_remove_archive_title_prefix ($title) {
+    if ( is_category() ) {
+        $title = single_cat_title( '', false );
+	}
+	if ( is_category() == 'Conferences' ) {
+		$title = '';
+	}
+    return $title;
+}
+add_action('get_the_archive_title', 'caise_remove_archive_title_prefix');
+

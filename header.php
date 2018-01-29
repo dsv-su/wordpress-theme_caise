@@ -71,67 +71,100 @@
 		<div id="right-menu">
 
 <?php
-    // Get the ID of a given category
     $category_id = get_cat_ID( 'News' );
-    // Get the URL of this category
     $category_link = get_category_link( $category_id );
-global $post;
-$args = array( 'posts_per_page' => 2, 'category' => $category_id );
 
-$myposts = get_posts( $args );
-if ($myposts) {
-echo "<h1>Last news</h1>";
-foreach ( $myposts as $post ) : setup_postdata( $post ); ?>
-	<p>
-		<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-	</p>
-<?php endforeach; 
-wp_reset_postdata();
-if (count($myposts) > 2) {?>
-<p><a href="<?php echo esc_url( $category_link ); ?>" title="More news">More news</a></p>
-<?php } }?>
+	$args = array(
+		'posts_per_page' 	=> -1,
+		'category' 			=> $category_id
+	);
+
+	$myposts = get_posts( $args );
+	if ($myposts) {
+		echo "<h1>Last news</h1>";
+		foreach ( $myposts as $post ) : setup_postdata( $post ); ?>
+			<p>
+				<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+			</p>
+		<?php endforeach;
+		wp_reset_postdata();
+		if (count($myposts) > 2) {?>
+			<p><a href="<?php echo esc_url( $category_link ); ?>" title="More news">More news</a></p>
+<?php
+		}
+	}
+?>
+
 
 <?php
-    // Get the ID of a given category
     $category_id = get_cat_ID( 'Assemblies' );
-    // Get the URL of this category
     $category_link = get_category_link( $category_id );
-global $post;
-$args = array( 'posts_per_page' => 2, 'category' => $category_id );
 
-$myposts = get_posts( $args );
-if ($myposts) {
-echo "<h1>Last assemblies</h1>";
-foreach ( $myposts as $post ) : setup_postdata( $post ); ?>
-	<p>
-		<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-	</p>
-<?php endforeach; 
-wp_reset_postdata();
-if (count($myposts) > 2) {?>
-<p><a href="<?php echo esc_url( $category_link ); ?>" title="More summaries">More summaries</a></p>
-<?php } } ?>
+	$args = array(
+		'posts_per_page' 	=> -1,
+		'category' 	=> $category_id
+	);
+
+	$myposts = get_posts( $args );
+	if ($myposts) {
+		echo "<h1>Last assemblies</h1>";
+		foreach ( $myposts as $post ) : setup_postdata( $post ); ?>
+			<p>
+				<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+			</p>
+		<?php endforeach;
+		wp_reset_postdata();
+		if (count($myposts) > 2) {?>
+			<p><a href="<?php echo esc_url( $category_link ); ?>" title="More conferences">More summaries</a></p>
+<?php
+		}
+	}
+?>
 
 <?php
-    // Get the ID of a given category
     $category_id = get_cat_ID( 'Conferences' );
-    // Get the URL of this category
     $category_link = get_category_link( $category_id );
-global $post;
-$args = array( 'posts_per_page' => 2, 'category' => $category_id );
 
-$myposts = get_posts( $args );
-if ($myposts) {
-echo "<h1>Last conferences</h1>";
-foreach ( $myposts as $post ) : setup_postdata( $post ); ?>
-	<p>
-		<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-	</p>
-<?php endforeach; 
-wp_reset_postdata();
-if (count($myposts) > 2) {?>
-<p><a href="<?php echo esc_url( $category_link ); ?>" title="More conferences">More conferences</a></p>
-<?php } }?>
+	$args = array(
+		'meta_key'	=> 'year',
+		'orderby' 	=> 'meta_value',
+		'order'		=> 'DESC',
+		'posts_per_page' 	=> -1,
+		'category' 	=> $category_id
+	);
+
+	$myposts = get_posts( $args );
+	if ($myposts) {
+		$str_coming 	= "<h1>Coming conferences</h1>";
+		$str_prev 		= "<h1>Previous conferences</h1>";
+		foreach ( array_slice($myposts, 0, 5) as $post ) {
+			setup_postdata( $post );
+			if ((get_field('year') == date("Y")) && (date("m") < 7)) {
+				if (!empty(get_field('link'))) {
+					$str_coming .= '<p><a href=' . get_field('link') . ' ' . get_field('place') . '>' .
+						'<span>' . get_field('year') . '</span> ' . get_field('place') . ' [' . get_field('country') . ']</a></p>';
+				} else {
+					$str_coming .= '<p>' .
+						'<span>' . get_field('year') . '</span> ' . get_field('place') . ' [' . get_field('country') . ']</p>';
+				}
+			} else {
+				if (!empty(get_field('link'))) {
+					$str_prev .= '<p><a href=' . get_field('link') . ' ' . get_field('place') . '>' .
+						'<span>' . get_field('year') . '</span> ' . get_field('place') . ' [' . get_field('country') . ']</a></p>';
+				} else {
+					$str_prev .= '<p>' .
+						'<span>' . get_field('year') . '</span> ' . get_field('place') . ' [' . get_field('country') . ']</p>';
+				}
+			}
+		}
+		wp_reset_postdata();
+		echo $str_coming . $str_prev;
+		if (count($myposts) > 5) {?>
+			<p><a href="<?php echo esc_url( $category_link ); ?>" title="More conferences">More conferences</a></p>
+<?php
+		}
+	}
+?>
 
 		</div>
 		<div id="content" class="site-content">
