@@ -14,10 +14,16 @@
 
 		<div id="footer" class="site-footer" role="contentinfo">
 			<span style="float:left;" class="left">All rights reserved &copy; 1989 - 2006 CAiSE</span>
+
 			<span class="right">
-			<a href="contact.php">TO DO CONTACT FORM!</a> | 
-			<a href="http://validator.w3.org/check/referer">XHTML Valid</a> | 
-			<a href="http://jigsaw.w3.org/css-validator/validator?uri=http://www.lirmm.fr/caise/styles/style.css&amp;usermedium=all">CSS Valid</a> 
+				<?php if ( has_nav_menu( 'footer' ) ) : ?>
+					<?php
+						wp_nav_menu( array(
+							'theme_location' => 'footer',
+							'menu_class'     => 'footer-menu',
+						 ) );
+					?>
+				<?php endif; ?>
 			</span>
 		</div><!-- .site-footer -->
 	</div><!-- .site-inner -->

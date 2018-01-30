@@ -97,6 +97,7 @@
 
 
 <?php
+if (is_user_logged_in()) {
     $category_id = get_cat_ID( 'Assemblies' );
     $category_link = get_category_link( $category_id );
 
@@ -119,6 +120,7 @@
 <?php
 		}
 	}
+}
 ?>
 
 <?php

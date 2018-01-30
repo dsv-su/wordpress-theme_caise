@@ -87,6 +87,7 @@ function caise_setup() {
 	register_nav_menus( array(
 		'primary' => __( 'Primary Menu', 'caise' ),
 		'social'  => __( 'Social Links Menu', 'caise' ),
+		'footer'  => __( 'Footer Links Menu', 'caise' ),
 	) );
 
 	/*
@@ -470,3 +471,13 @@ function caise_remove_archive_title_prefix ($title) {
 }
 add_action('get_the_archive_title', 'caise_remove_archive_title_prefix');
 
+/**
+ * Make category Assemblies members only and redirect non-members to login page.
+ */
+function check_redirect_page() {
+    if ( !is_user_logged_in() && is_category( 'Assemblies' ) ) {
+        wp_redirect( home_url( '/wp-admin' ) );
+        exit(); 
+    }
+}
+add_action( 'wp', 'check_redirect_page' );
