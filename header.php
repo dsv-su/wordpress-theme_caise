@@ -82,7 +82,7 @@
 	$myposts = get_posts( $args );
 	if ($myposts) {
 		echo "<h1>Last news</h1>";
-		foreach ( $myposts as $post ) : setup_postdata( $post ); ?>
+		foreach ( array_slice($myposts, 0, 2) as $post ) : setup_postdata( $post ); ?>
 			<p>
 				<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
 			</p>
@@ -109,7 +109,7 @@ if (is_user_logged_in()) {
 	$myposts = get_posts( $args );
 	if ($myposts) {
 		echo "<h1>Last assemblies</h1>";
-		foreach ( $myposts as $post ) : setup_postdata( $post ); ?>
+		foreach ( array_slice($myposts, 0, 2) as $post ) : setup_postdata( $post ); ?>
 			<p>
 				<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
 			</p>

@@ -475,9 +475,13 @@ add_action('get_the_archive_title', 'caise_remove_archive_title_prefix');
  * Make category Assemblies members only and redirect non-members to login page.
  */
 function check_redirect_page() {
-    if ( !is_user_logged_in() && is_category( 'Assemblies' ) ) {
-        wp_redirect( home_url( '/wp-admin' ) );
-        exit(); 
+    if ( !is_user_logged_in() && (is_category( 'Assemblies' ) || has_category( 'Assemblies' ))) {
+		wp_redirect( home_url( '/wp-admin' ) );
+		exit();
     }
 }
 add_action( 'wp', 'check_redirect_page' );
+
+/* Allow logging in from iframe */
+remove_action( 'login_init', 'send_frame_options_header' );
+remove_action( 'admin_init', 'send_frame_options_header' );
